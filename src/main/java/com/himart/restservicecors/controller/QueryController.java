@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.himart.restservicecors.dto.QueryResponseDto;
-import com.himart.restservicecors.dto.SampleDto;
+import com.himart.restservicecors.dto.MapperTestDto;
 import com.himart.restservicecors.dto.TestDto;
 import com.himart.restservicecors.service.QueryService;
 
@@ -53,7 +53,7 @@ public class QueryController {
 	
 	//for testing : RETURN JSON TEST SET BY QUERY MAPPER
 	@GetMapping("/jsontest2")
-    public List<SampleDto> getJsonTest2() {
+    public List<MapperTestDto> getJsonTest2() {
     	return queryService.getJsonTest();
     }
 	

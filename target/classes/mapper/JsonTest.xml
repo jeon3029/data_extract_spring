@@ -3,7 +3,7 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.himart.restservicecors.dao.JsonTestDao">
-	<select id="getJsonTest" resultType="SampleDto">
+	<select id="getJsonTest" resultType="MapperTestDto">
 		select empno,ename from emp
 	</select>
 </mapper>

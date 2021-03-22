@@ -1,9 +1,6 @@
 package com.himart.restservicecors.dto;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import com.himart.restservicecors.dao.QueryDao;
 
 //TODO : 시간 남으면 LOMBOK 사용
 

@@ -1,7 +1,6 @@
 package com.himart.restservicecors.service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.himart.restservicecors.dao.JsonTestDao;
 import com.himart.restservicecors.dao.QueryDao;
 import com.himart.restservicecors.dto.QueryResponseDto;
-import com.himart.restservicecors.dto.SampleDto;
+import com.himart.restservicecors.dto.MapperTestDto;
 import com.himart.restservicecors.dto.TestDto;
 
 import java.sql.Connection;
@@ -33,6 +32,7 @@ public class QueryService {
 	private JsonTestDao jsonDao;
 	
 	public  QueryResponseDto getQueryResponse(int id, String query) {
+		
 		QueryResponseDto res = new QueryResponseDto();
 		long beforeTime = System.currentTimeMillis();
 		try {
@@ -85,7 +85,7 @@ public class QueryService {
         return res;
     }
 	
-	public List<SampleDto> getJsonTest(){
+	public List<MapperTestDto> getJsonTest(){
 		return jsonDao.getJsonTest();
 	}
 	

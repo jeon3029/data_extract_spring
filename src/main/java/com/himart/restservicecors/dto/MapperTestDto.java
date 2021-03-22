@@ -1,6 +1,6 @@
 package com.himart.restservicecors.dto;
 
-public class SampleDto {
+public class MapperTestDto {
 	private Integer empno;
 	private String ename;
 	public Integer getNo() {

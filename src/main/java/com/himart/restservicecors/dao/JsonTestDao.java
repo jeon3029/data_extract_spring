@@ -4,11 +4,9 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.himart.restservicecors.dto.SampleDto;
-import com.himart.restservicecors.dto.TestDto;
-
+import com.himart.restservicecors.dto.MapperTestDto;
 
 @Mapper
 public interface JsonTestDao {
-	public List<SampleDto> getJsonTest();
+	public List<MapperTestDto> getJsonTest();
 }
