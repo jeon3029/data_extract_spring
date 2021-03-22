@@ -1,0 +1,1 @@
+curl -d "{\"user\":\"1327964\", \"query\":\"select * from emp\"}" -H "Content-Type: application/json" -X POST http://10.154.65.35:8081/query

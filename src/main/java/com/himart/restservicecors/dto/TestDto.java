@@ -1,10 +1,10 @@
 package com.himart.restservicecors.dto;
 
 
-public class SampleVO{	
+public class TestDto{	
 	private Integer no;
 	private String name;
-	public SampleVO(){
+	public TestDto(){
 		no=1;
 		name="test";
 	}

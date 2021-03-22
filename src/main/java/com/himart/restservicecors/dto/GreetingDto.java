@@ -1,16 +1,16 @@
 package com.himart.restservicecors.dto;
 
-public class Greeting {
+public class GreetingDto {
 
 	private final long id;
 	private final String content;
 
-	public Greeting() {
+	public GreetingDto() {
 		this.id = -1;
 		this.content = "";
 	}
 
-	public Greeting(long id, String content) {
+	public GreetingDto(long id, String content) {
 		this.id = id;
 		this.content = content;
 	}

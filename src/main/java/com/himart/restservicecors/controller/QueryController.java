@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.himart.restservicecors.dto.QueryResponseDto;
 import com.himart.restservicecors.dto.SampleDto;
-import com.himart.restservicecors.dto.SampleVO;
+import com.himart.restservicecors.dto.TestDto;
 import com.himart.restservicecors.service.QueryService;
 
 import org.slf4j.Logger;
@@ -44,8 +44,8 @@ public class QueryController {
     
     //for testing : RETURN SAMPLE JSON DATA
 	@RequestMapping("/jsontest")
-	public SampleVO getjsonTest1() {
-		SampleVO sampleVO = new SampleVO();
+	public TestDto getjsonTest1() {
+		TestDto sampleVO = new TestDto();
 		sampleVO.setNo(1);
 		sampleVO.setName("제이슨 객체입니다.");
 		return sampleVO;
@@ -59,7 +59,7 @@ public class QueryController {
 	
 	//for testing : RETURN JSON TEST SET BY ARGUMENT
 	@PostMapping("/jsontest3")
-    public SampleVO getJsonTest3(@RequestBody HashMap<String, String> map) {
+    public TestDto getJsonTest3(@RequestBody HashMap<String, String> map) {
 		int id = Integer.parseInt(map.get("user"));
 		String query = map.get("query");
     	return queryService.getJsonTest2(id,query);

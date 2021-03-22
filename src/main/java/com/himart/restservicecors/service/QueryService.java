@@ -13,7 +13,7 @@ import com.himart.restservicecors.dao.JsonTestDao;
 import com.himart.restservicecors.dao.QueryDao;
 import com.himart.restservicecors.dto.QueryResponseDto;
 import com.himart.restservicecors.dto.SampleDto;
-import com.himart.restservicecors.dto.SampleVO;
+import com.himart.restservicecors.dto.TestDto;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -89,8 +89,8 @@ public class QueryService {
 		return jsonDao.getJsonTest();
 	}
 	
-	public SampleVO getJsonTest2(int i,String q){
-		SampleVO t = new SampleVO();
+	public TestDto getJsonTest2(int i,String q){
+		TestDto t = new TestDto();
 		t.setName(q);
 		t.setNo(i);
 		return t;

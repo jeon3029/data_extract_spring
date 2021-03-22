@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 
-import com.himart.restservicecors.dto.Greeting;
+import com.himart.restservicecors.dto.GreetingDto;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -24,22 +24,22 @@ public class GreetingIntegrationTests {
 
 	@Test
 	public void corsWithAnnotation() throws Exception {
-		ResponseEntity<Greeting> entity = this.restTemplate.exchange(
+		ResponseEntity<GreetingDto> entity = this.restTemplate.exchange(
 				RequestEntity.get(uri("/greeting")).header(HttpHeaders.ORIGIN, "http://localhost:8081").build(),
-				Greeting.class);
+				GreetingDto.class);
 		assertEquals(HttpStatus.OK, entity.getStatusCode());
 		assertEquals("http://localhost:8081", entity.getHeaders().getAccessControlAllowOrigin());
-		Greeting greeting = entity.getBody();
+		GreetingDto greeting = entity.getBody();
 		assertEquals("Hello, World!", greeting.getContent());
 	}
 
 	@Test
 	public void corsWithJavaconfig() {
-		ResponseEntity<Greeting> entity = this.restTemplate.exchange(RequestEntity.get(uri("/greeting-javaconfig"))
-				.header(HttpHeaders.ORIGIN, "http://localhost:8081").build(), Greeting.class);
+		ResponseEntity<GreetingDto> entity = this.restTemplate.exchange(RequestEntity.get(uri("/greeting-javaconfig"))
+				.header(HttpHeaders.ORIGIN, "http://localhost:8081").build(), GreetingDto.class);
 		assertEquals(HttpStatus.OK, entity.getStatusCode());
 		assertEquals("http://localhost:8081", entity.getHeaders().getAccessControlAllowOrigin());
-		Greeting greeting = entity.getBody();
+		GreetingDto greeting = entity.getBody();
 		assertEquals("Hello, World!", greeting.getContent());
 	}
 

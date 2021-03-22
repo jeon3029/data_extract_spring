@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.himart.restservicecors.dto.Greeting;
+import com.himart.restservicecors.dto.GreetingDto;
 
 @RestController
 public class GreetingController {
@@ -18,15 +18,15 @@ public class GreetingController {
 
 	@CrossOrigin(origins = "http://localhost:8081")
 	@GetMapping("/greeting")
-	public Greeting greeting(@RequestParam(required = false, defaultValue = "World") String name) {
+	public GreetingDto greeting(@RequestParam(required = false, defaultValue = "World") String name) {
 		System.out.println("==== get greeting ====");
-		return new Greeting(counter.incrementAndGet(), String.format(template, name));
+		return new GreetingDto(counter.incrementAndGet(), String.format(template, name));
 	}
 
 	@GetMapping("/greeting-javaconfig")
-	public Greeting greetingWithJavaconfig(@RequestParam(required = false, defaultValue = "World") String name) {
+	public GreetingDto greetingWithJavaconfig(@RequestParam(required = false, defaultValue = "World") String name) {
 		System.out.println("==== in greeting ====");
-		return new Greeting(counter.incrementAndGet(), String.format(template, name));
+		return new GreetingDto(counter.incrementAndGet(), String.format(template, name));
 	}
 	
 
