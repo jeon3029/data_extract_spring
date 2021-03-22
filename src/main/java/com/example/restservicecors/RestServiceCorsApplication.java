@@ -27,9 +27,6 @@ public class RestServiceCorsApplication implements CommandLineRunner{
 		SpringApplication.run(RestServiceCorsApplication.class, args);
 	}
 	
-//	@Autowired
-//	JdbcTemplate jdbc;
-	
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
@@ -39,7 +36,6 @@ public class RestServiceCorsApplication implements CommandLineRunner{
 			}
 		};
 	}
-	
 	
 	//부트시점 실행되는 코드
 	@Override

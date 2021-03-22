@@ -1,19 +1,11 @@
 package com.example.restservicecors.controller;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.jdbc.core.JdbcTemplate;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,13 +19,13 @@ import com.example.restservicecors.dto.SampleDto;
 import com.example.restservicecors.dto.SampleVO;
 import com.example.restservicecors.service.QueryService;
 
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @RestController
 public class QueryController {
-	@Autowired
-	JdbcTemplate jdbc;
-	
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 	@Autowired
 	QueryService queryService;
 	
@@ -42,61 +34,15 @@ public class QueryController {
     public String isRunning() {
         return "I'm Alive!";
     }
-    /*
-    @RequestMapping(value = "/query", method = RequestMethod.GET)
-    @ResponseStatus(value = HttpStatus.OK)
-    public QueryResponseDto getData() {
-        String sql = "select * from emp";
-        QueryResponseDto res = new QueryResponseDto();
-        
-		try {
-            String url = "jdbc:oracle:thin:@localhost:1521:XE";
-            Connection conn = DriverManager.getConnection(url,"adm","oracle");
-            System.out.println("DB 접속 성공!");
-            
-            PreparedStatement stmt = conn.prepareStatement(sql,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            ResultSet rs = stmt.executeQuery();
-            ResultSetMetaData rsmd = rs.getMetaData();
-            int columnCount = rsmd.getColumnCount(); 
-            
-            String[] header = new String[columnCount];
-            
-            for(int i=1; i<=columnCount; i++) {
-    	        System.out.print(rsmd.getColumnName(i) +"\t");
-    	        header[i-1] = rsmd.getColumnName(i);
-    	    }
-            System.out.println(); 
-            rs.last();
-            int rowCount =rs.getRow();
-            System.out.println("rowcount : " + rowCount);
-            ArrayList[] set = new ArrayList[rowCount];
-            int i=0;
-            rs.beforeFirst();
-    		while(rs.next()) {
-//    			set[i] = new ArrayList<String>();
-    			for(int j=1; j<=columnCount; j++) {
-//    				set[i].add(rs.getString(j));
-    		        System.out.print(rs.getString(j) +"\t"); 
-    		    }
-    			System.out.println(); 
-    			i++;
-    		}
-            res.setColNum(columnCount);
-//            res.setHeader(header);
-//            res.setData(set);            
-            System.out.println("DB 접속 종료!");
-            rs.close();
-            stmt.close();
-            conn.close();
-        } catch (Exception e) {
-            System.err.println("Got an exception! ");
-            System.err.println(e.getMessage());
-            res.setStatus(e.getMessage());
-        }
-        return res;
+    
+    @PostMapping("/query")
+    public QueryResponseDto getQueryResponse(@RequestBody HashMap<String, String> map) {
+		int id = Integer.parseInt(map.get("user"));
+		String query = map.get("query");
+    	return queryService.getQueryResponse(id,query);
     }
-    */
-	
+    
+    //for testing : RETURN SAMPLE JSON DATA
 	@RequestMapping("/jsontest")
 	public SampleVO getjsonTest1() {
 		SampleVO sampleVO = new SampleVO();
@@ -105,11 +51,18 @@ public class QueryController {
 		return sampleVO;
 	}
 	
-	//for testing : finished
+	//for testing : RETURN JSON TEST SET BY QUERY MAPPER
 	@GetMapping("/jsontest2")
     public List<SampleDto> getJsonTest2() {
     	return queryService.getJsonTest();
     }
 	
+	//for testing : RETURN JSON TEST SET BY ARGUMENT
+	@PostMapping("/jsontest3")
+    public SampleVO getJsonTest3(@RequestBody HashMap<String, String> map) {
+		int id = Integer.parseInt(map.get("user"));
+		String query = map.get("query");
+    	return queryService.getJsonTest2(id,query);
+    }
 }
 
