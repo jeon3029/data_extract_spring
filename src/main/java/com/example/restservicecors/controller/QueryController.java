@@ -14,6 +14,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,9 +22,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.restservicecors.dto.QueryResponse;
+import com.example.restservicecors.dto.QueryResponseDto;
+import com.example.restservicecors.dto.SampleDto;
 import com.example.restservicecors.dto.SampleVO;
-import com.example.restservicecors.service.JsonService;
+import com.example.restservicecors.service.QueryService;
 
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 
@@ -32,24 +34,26 @@ public class QueryController {
 	@Autowired
 	JdbcTemplate jdbc;
 	
+	@Autowired
+	QueryService queryService;
+	
     @RequestMapping(value = "/ping", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public String isRunning() {
         return "I'm Alive!";
     }
-    
+    /*
     @RequestMapping(value = "/query", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
-    public QueryResponse getData() {
+    public QueryResponseDto getData() {
         String sql = "select * from emp";
-        QueryResponse res = new QueryResponse();
+        QueryResponseDto res = new QueryResponseDto();
+        
 		try {
             String url = "jdbc:oracle:thin:@localhost:1521:XE";
             Connection conn = DriverManager.getConnection(url,"adm","oracle");
             System.out.println("DB 접속 성공!");
             
-//            Statement stmt = conn.createStatement();
-//            ResultSet rs = stmt.executeQuery(sql);
             PreparedStatement stmt = conn.prepareStatement(sql,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = stmt.executeQuery();
             ResultSetMetaData rsmd = rs.getMetaData();
@@ -91,25 +95,21 @@ public class QueryController {
         }
         return res;
     }
-    
+    */
 	
 	@RequestMapping("/jsontest")
-	public SampleVO restJson() {
+	public SampleVO getjsonTest1() {
 		SampleVO sampleVO = new SampleVO();
 		sampleVO.setNo(1);
 		sampleVO.setName("제이슨 객체입니다.");
 		return sampleVO;
 	}
 	
-	//for testing : not finished
-	@PostMapping("/jsontest2")
-    public List<HashMap<Object, Object>> getLikeCntByType(@RequestBody HashMap<String, String> map) {
-    	String user = map.get("user");
-    	String query = map.get("query");
-    	List<HashMap<String, String>> ret = new ArrayList<HashMap<String,String>>();
-//    	ret["user"] = user;
-//    	ret["query"] = query;
-    	return JsonService.test2(user,query);
+	//for testing : finished
+	@GetMapping("/jsontest2")
+    public List<SampleDto> getJsonTest2() {
+    	return queryService.getJsonTest();
     }
+	
 }
 

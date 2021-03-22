@@ -27,8 +27,8 @@ public class RestServiceCorsApplication implements CommandLineRunner{
 		SpringApplication.run(RestServiceCorsApplication.class, args);
 	}
 	
-	@Autowired
-	JdbcTemplate jdbc;
+//	@Autowired
+//	JdbcTemplate jdbc;
 	
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
