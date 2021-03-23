@@ -13,7 +13,14 @@ import com.himart.restservicecors.dao.QueryDao;
 import com.himart.restservicecors.dto.QueryResponseDto;
 import com.himart.restservicecors.dto.MapperTestDto;
 import com.himart.restservicecors.dto.TestDto;
+import com.opencsv.CSVWriter;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -21,6 +28,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 
 @Service
 public class QueryService {
@@ -84,7 +92,42 @@ public class QueryService {
         }
         return res;
     }
-	
+	public void genCsvFileWithQuery(int id,String query) {
+		long beforeTime = System.currentTimeMillis();
+		try {
+            String url = "jdbc:oracle:thin:@localhost:1521:XE";
+            Connection conn = DriverManager.getConnection(url,"adm","oracle");
+            logger.info(id + " : DB 접속 성공");
+            
+            //안에 " 포함되어있으면 문제 될 수 있음
+            Statement stmt = conn.createStatement(java.sql.ResultSet.TYPE_FORWARD_ONLY, java.sql.ResultSet.CONCUR_READ_ONLY);
+//            stmt.setFetchSize(Integer.MIN_VALUE);
+            
+            ResultSet rs = stmt.executeQuery(query);
+            
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int columnCount = rsmd.getColumnCount();
+             
+            CSVWriter csvWriter = new CSVWriter(new FileWriter("C:\\"+id+".csv"), 
+            		','
+            		);
+            
+            csvWriter.writeAll(rs, true);
+    		long afterTime = System.currentTimeMillis();
+    		
+            logger.info(id + " : Runngin TIME : " + (afterTime - beforeTime) + "ms");
+            logger.info(id + " : DB 접속 종료!");
+            csvWriter.close();
+            rs.close();
+            stmt.close();
+            conn.close();
+            
+        } catch (Exception e) {
+        	System.err.println("Got an exception! ");
+        	logger.error(e.getMessage());
+//            res.setStaus(e.getMessage());
+        }
+	}
 	public List<MapperTestDto> getJsonTest(){
 		return jsonDao.getJsonTest();
 	}

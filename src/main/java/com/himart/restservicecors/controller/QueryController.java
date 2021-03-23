@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.himart.restservicecors.dto.QueryResponseDto;
 import com.himart.restservicecors.dto.MapperTestDto;
 import com.himart.restservicecors.dto.TestDto;
+import com.himart.restservicecors.service.AsyncService;
 import com.himart.restservicecors.service.QueryService;
 
 import org.slf4j.Logger;
@@ -25,9 +26,12 @@ import org.slf4j.LoggerFactory;
 @RestController
 public class QueryController {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
+	
 	@Autowired
 	QueryService queryService;
+	
+	@Autowired
+	AsyncService asyncService;
 	
     @RequestMapping(value = "/ping", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
@@ -39,7 +43,15 @@ public class QueryController {
     public QueryResponseDto getQueryResponse(@RequestBody HashMap<String, String> map) {
 		int id = Integer.parseInt(map.get("user"));
 		String query = map.get("query");
-    	return queryService.getQueryResponse(id,query);
+		return queryService.getQueryResponse(id,query);
+    }
+    
+    @PostMapping("/query_async")
+    public String getQueryAsyncResponse(@RequestBody HashMap<String, String> map) {
+		int id = Integer.parseInt(map.get("user"));
+		String query = map.get("query");
+		asyncService.getQueryResponse(id, query);
+		return id + " : async Request Confirmed";
     }
     
     //for testing : RETURN SAMPLE JSON DATA
