@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 
 import com.himart.restservicecors.dao.JsonTestDao;
 import com.himart.restservicecors.dao.QueryDao;
+import com.himart.restservicecors.dao.SessionDao;
 import com.himart.restservicecors.dto.QueryResponseDto;
+import com.himart.restservicecors.dto.SessionDto;
 import com.himart.restservicecors.dto.MapperTestDto;
 import com.himart.restservicecors.dto.TestDto;
 import com.opencsv.CSVWriter;
@@ -38,6 +40,9 @@ public class QueryService {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	private JsonTestDao jsonDao;
+	
+	@Autowired
+	private SessionDao sessionDao;
 	
 	public  QueryResponseDto getQueryResponse(int id, String query) {
 		
@@ -88,6 +93,7 @@ public class QueryService {
         } catch (Exception e) {
         	System.err.println("Got an exception! ");
         	logger.error(e.getMessage());
+        	
             res.setStaus(e.getMessage());
         }
         return res;
@@ -99,6 +105,16 @@ public class QueryService {
             Connection conn = DriverManager.getConnection(url,"adm","oracle");
             logger.info(id + " : DB 접속 성공");
             
+            String sessionQuery = "select sid, serial# from V$SESSION where AUDSID = userenv('SESSIONID')";
+            PreparedStatement tstmt = conn.prepareStatement(sessionQuery,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet trs = tstmt.executeQuery();
+            logger.info(id + " : 세션 정보 획득 성공");
+            trs.next();
+            int sid = Integer.parseInt(trs.getString(1));
+            int session = Integer.parseInt(trs.getString(2));
+            logger.info(id + " : " + sid + " / " + session);
+            sessionDao.setId(id, sid, session);
+            
             //안에 " 포함되어있으면 문제 될 수 있음
             Statement stmt = conn.createStatement(java.sql.ResultSet.TYPE_FORWARD_ONLY, java.sql.ResultSet.CONCUR_READ_ONLY);
 //            stmt.setFetchSize(Integer.MIN_VALUE);
@@ -108,25 +124,46 @@ public class QueryService {
             ResultSetMetaData rsmd = rs.getMetaData();
             int columnCount = rsmd.getColumnCount();
              
-            CSVWriter csvWriter = new CSVWriter(new FileWriter("C:\\"+id+".csv"), 
-            		','
-            		);
+            CSVWriter csvWriter = new CSVWriter(new FileWriter("C:\\"+id+".csv"), ',');
             
             csvWriter.writeAll(rs, true);
     		long afterTime = System.currentTimeMillis();
     		
             logger.info(id + " : Runngin TIME : " + (afterTime - beforeTime) + "ms");
-            logger.info(id + " : DB 접속 종료!");
             csvWriter.close();
             rs.close();
             stmt.close();
             conn.close();
-            
+            logger.info(id + " : DB 접속 종료!");
+            sessionDao.removeId(id);
+            logger.info(id + " : Session접속 종료!");
         } catch (Exception e) {
-        	System.err.println("Got an exception! ");
+        	System.err.println(id + " : Got an exception! ");
         	logger.error(e.getMessage());
-//            res.setStaus(e.getMessage());
         }
+	}
+	
+	public void killSession(int id) {
+		//session not alive
+		if (sessionDao.checkId(id)==false) return;
+		try {
+			String url = "jdbc:oracle:thin:@localhost:1521:XE";
+            Connection conn = DriverManager.getConnection(url,"adm","oracle");
+            SessionDto session = sessionDao.getSession(id);
+            String killQuery = "ALTER SYSTEM KILL SESSION \'" + session.getSid() +"," + session.getSession()+"\'";
+            
+            PreparedStatement stmt = conn.prepareStatement(killQuery,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            ResultSet rs = stmt.executeQuery();
+            rs.close();
+            stmt.close();
+            conn.close();
+		} catch(Exception e) {
+			
+		}
+	}
+	
+	public boolean checkSession(int id) {
+		return sessionDao.checkId(id);
 	}
 	public List<MapperTestDto> getJsonTest(){
 		return jsonDao.getJsonTest();

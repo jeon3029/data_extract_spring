@@ -54,6 +54,20 @@ public class QueryController {
 		return id + " : async Request Confirmed";
     }
     
+    @PostMapping("/query_check")
+    public boolean checkSession(@RequestBody HashMap<String, String> map) {
+		int id = Integer.parseInt(map.get("user"));
+		boolean b = queryService.checkSession(id);
+		return b;
+    }
+    
+    @PostMapping("/query_kill")
+    public String killSession(@RequestBody HashMap<String, String> map) {
+		int id = Integer.parseInt(map.get("user"));
+		queryService.killSession(id);
+		return id + " : kill Session Confirmed";
+    }
+    
     //for testing : RETURN SAMPLE JSON DATA
 	@RequestMapping("/jsontest")
 	public TestDto getjsonTest1() {
