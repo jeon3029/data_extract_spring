@@ -13,7 +13,9 @@ public class SessionDao {
 	SessionDao(){
 		System.out.println("session init");
 	}
-	
+	public int getSessionCount() {
+		return sessionDao.size();
+	}
 	public boolean checkId(Integer id) {
 		return sessionDao.containsKey(id);
 	}

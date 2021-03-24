@@ -140,7 +140,7 @@ public class QueryService {
         } catch (Exception e) {
         	System.err.println(id + " : Got an exception! ");
         	logger.error(e.getMessage());
-        }
+        } 
 	}
 	
 	public void killSession(int id) {
@@ -152,8 +152,10 @@ public class QueryService {
             SessionDto session = sessionDao.getSession(id);
             String killQuery = "ALTER SYSTEM KILL SESSION \'" + session.getSid() +"," + session.getSession()+"\'";
             
+            
             PreparedStatement stmt = conn.prepareStatement(killQuery,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             ResultSet rs = stmt.executeQuery();
+            sessionDao.removeId(id);
             rs.close();
             stmt.close();
             conn.close();
@@ -167,6 +169,9 @@ public class QueryService {
 	}
 	public List<MapperTestDto> getJsonTest(){
 		return jsonDao.getJsonTest();
+	}
+	public int getSessionCount() {
+		return sessionDao.getSessionCount();
 	}
 	
 	public TestDto getJsonTest2(int i,String q){

@@ -48,6 +48,9 @@ public class QueryController {
     
     @PostMapping("/query_async")
     public String getQueryAsyncResponse(@RequestBody HashMap<String, String> map) {
+    	if(queryService.getSessionCount()>=2) {
+    		return "Session Full";
+    	}
 		int id = Integer.parseInt(map.get("user"));
 		String query = map.get("query");
 		asyncService.getQueryResponse(id, query);
@@ -65,7 +68,7 @@ public class QueryController {
     public String killSession(@RequestBody HashMap<String, String> map) {
 		int id = Integer.parseInt(map.get("user"));
 		queryService.killSession(id);
-		return id + " : kill Session Confirmed";
+		return id + " : kill Session Confirmed / Current sessionCount : "+queryService.getSessionCount();
     }
     
     //for testing : RETURN SAMPLE JSON DATA
