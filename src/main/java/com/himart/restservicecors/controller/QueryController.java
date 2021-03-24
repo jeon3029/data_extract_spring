@@ -1,11 +1,20 @@
 package com.himart.restservicecors.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -69,6 +78,20 @@ public class QueryController {
 		int id = Integer.parseInt(map.get("user"));
 		queryService.killSession(id);
 		return id + " : kill Session Confirmed / Current sessionCount : "+queryService.getSessionCount();
+    }
+    
+    @PostMapping("/query_download")
+    public ResponseEntity<Resource> downloadFile(@RequestBody HashMap<String, String> map) throws IOException {
+    	
+    	int fileName = Integer.parseInt(map.get("user"));
+    	Path path = Paths.get("c:\\" + fileName + ".csv");
+    	String contentType = Files.probeContentType(path);
+    	
+    	HttpHeaders headers = new HttpHeaders();
+    	headers.add(HttpHeaders.CONTENT_TYPE, contentType);
+    	
+    	Resource resource = new InputStreamResource(Files.newInputStream(path));
+    	return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
     
     //for testing : RETURN SAMPLE JSON DATA
