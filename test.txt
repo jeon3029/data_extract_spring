@@ -1,1 +1,8 @@
+keytool -import -noprompt -trustcacerts -alias myFancyAlias -file maven.cer -keystore C:\Program Files\Java\jdk1.8.0_151\jre\lib\security\cacerts -storepass changeit
+keytool -import -noprompt -trustcacerts -alias myFancyAlias2 -file lombok.cer -keystore C:\Program Files\Java\jdk1.8.0_151\jre\lib\security\cacerts -storepass changeit
+keytool -import -noprompt -trustcacerts -alias myFancyAlias3 -file maven2.cer -keystore C:\Program Files\Java\jdk1.8.0_151\jre\lib\security\cacerts -storepass changeit
+
+
 curl -d "{\"user\":\"1327964\", \"query\":\"select * from emp\"}" -H "Content-Type: application/json" -X POST http://10.154.65.35:8081/query
+
+
