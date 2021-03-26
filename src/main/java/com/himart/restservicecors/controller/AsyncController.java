@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.himart.restservicecors.service.AsyncService;
 
+//추후 삭제(테스트용)
 @RestController
 public class AsyncController {
 

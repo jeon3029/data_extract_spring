@@ -42,12 +42,16 @@ public class QueryController {
 	@Autowired
 	AsyncService asyncService;
 	
-    @RequestMapping(value = "/ping", method = RequestMethod.GET)
+	//추후 삭제(테스트용)
+	//RETURN : "I'm Alive" - network testing
+	@RequestMapping(value = "/ping", method = RequestMethod.GET)
     @ResponseStatus(value = HttpStatus.OK)
     public String isRunning() {
         return "I'm Alive!";
     }
     
+	//추후 삭제(테스트용)
+	//RETURN : json data
     @PostMapping("/query")
     public QueryResponseDto getQueryResponse(@RequestBody HashMap<String, String> map) {
 		int id = Integer.parseInt(map.get("user"));
@@ -94,7 +98,8 @@ public class QueryController {
     	return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
     
-    //for testing : RETURN SAMPLE JSON DATA
+    //추후 삭제(테스트용)
+    //RETURN SAMPLE JSON DATA
 	@RequestMapping("/jsontest")
 	public TestDto getjsonTest1() {
 		TestDto sampleVO = new TestDto();
@@ -103,13 +108,15 @@ public class QueryController {
 		return sampleVO;
 	}
 	
-	//for testing : RETURN JSON TEST SET BY QUERY MAPPER
+	//추후 삭제(테스트용)
+	//RETURN JSON TEST SET BY QUERY MAPPER
 	@GetMapping("/jsontest2")
     public List<MapperTestDto> getJsonTest2() {
     	return queryService.getJsonTest();
     }
 	
-	//for testing : RETURN JSON TEST SET BY ARGUMENT
+	//추후 삭제(테스트용)
+	//RETURN JSON TEST SET BY ARGUMENT
 	@PostMapping("/jsontest3")
     public TestDto getJsonTest3(@RequestBody HashMap<String, String> map) {
 		int id = Integer.parseInt(map.get("user"));

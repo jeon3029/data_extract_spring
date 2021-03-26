@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.himart.restservicecors.dto.GreetingDto;
 
+//추후 삭제(테스트용)
 @RestController
 public class GreetingController {
 

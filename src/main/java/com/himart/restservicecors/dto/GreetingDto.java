@@ -1,5 +1,5 @@
 package com.himart.restservicecors.dto;
-
+//추후 삭제(테스트용)
 public class GreetingDto {
 
 	private final long id;

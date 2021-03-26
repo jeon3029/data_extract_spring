@@ -15,7 +15,9 @@ public class AsyncService {
 	
 	@Autowired
 	QueryService queryService;
+
 	//비동기
+	//추후 삭제(테스트용)
 	@Async
     public void onAsync() {
         try {
@@ -34,6 +36,7 @@ public class AsyncService {
     }
 	
     //동기
+	//추후 삭제(테스트용)
     public void onSync() {
         try {
             Thread.sleep(5000);
