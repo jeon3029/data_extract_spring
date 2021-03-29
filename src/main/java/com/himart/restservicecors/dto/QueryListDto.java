@@ -2,7 +2,7 @@ package com.himart.restservicecors.dto;
 
 import lombok.Data;
 
- @Data
+@Data
 public class QueryListDto {
 	int q_code;
 	String title;
@@ -10,5 +10,4 @@ public class QueryListDto {
 	public QueryListDto() {
 		
 	}
-	
 }

@@ -54,11 +54,7 @@ public class QueryService {
             logger.info(id + " : DB 접속 성공");
             
             PreparedStatement stmt = conn.prepareStatement(query,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            
-            //todo : large data
-//          Statement stmt = readOnlyConn.createStatement(java.sql.ResultSet.TYPE_FORWARD_ONLY, java.sql.ResultSet.CONCUR_READ_ONLY)
-//          stmt.setFetchSize(Integer.MIN_VALUE);
-            
+                        
             ResultSet rs = stmt.executeQuery();
             ResultSetMetaData rsmd = rs.getMetaData();
             int columnCount = rsmd.getColumnCount(); 
@@ -79,11 +75,13 @@ public class QueryService {
     			i++;
     		}
     		long afterTime = System.currentTimeMillis();
-    		res.setMiltime(afterTime-beforeTime);
-            res.setColnum(columnCount);
-            res.setRownum(rowCount);
+    		res.setMilTime(afterTime-beforeTime);
+    		
+            res.setColNum(columnCount);
+            res.setRowNum(rowCount);
             res.setHeader(header);
             res.setData(set);
+    		
             logger.info(id + " : Runngin TIME : " + (afterTime - beforeTime) + "ms");
             logger.info(id + " : DB 접속 종료!");
             rs.close();
@@ -93,8 +91,7 @@ public class QueryService {
         } catch (Exception e) {
         	System.err.println("Got an exception! ");
         	logger.error(e.getMessage());
-        	
-            res.setStaus(e.getMessage());
+        	res.setStatus(e.getMessage());
         }
         return res;
     }
