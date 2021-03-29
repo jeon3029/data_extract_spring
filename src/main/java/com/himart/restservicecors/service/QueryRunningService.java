@@ -35,7 +35,7 @@ public class QueryRunningService {
 	private String dbPass;
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	public  QueryResponseDto getQueryResponse(int id, String query) {
+	public QueryResponseDto getQueryResponse(int id, String query) {
 		
 		QueryResponseDto res = new QueryResponseDto();
 		long beforeTime = System.currentTimeMillis();
