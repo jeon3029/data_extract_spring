@@ -9,6 +9,8 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -18,15 +20,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.himart.restservicecors.dto.QueryResponseDto;
 import com.himart.restservicecors.dto.MapperTestDto;
-import com.himart.restservicecors.dto.QueryListDto;
+import com.himart.restservicecors.dto.QueryDto;
 import com.himart.restservicecors.dto.TestDto;
 import com.himart.restservicecors.service.AsyncService;
 import com.himart.restservicecors.service.QueryService;
@@ -54,26 +58,74 @@ public class QueryController {
     
 	//추후 삭제(테스트용)
 	//RETURN : json data
-    @PostMapping("/query")
+    @PostMapping("/query_json")
     public QueryResponseDto getQueryResponse(@RequestBody HashMap<String, String> map) {
 		int id = Integer.parseInt(map.get("user"));
 		String query = map.get("query");
 		return queryService.getQueryResponse(id,query);
     }
+    
+    //그룹별 쿼리 리스트
     @GetMapping("/query/all/{org_id}")
-    public List<QueryListDto> getQueryByOrgId(@PathVariable String org_id) {    	
+    public List<QueryDto> getQueryByOrgId(@PathVariable String org_id) {    	
         return queryService.getAllQueryListByOrgId(org_id);
     }
     
+    //쿼리 정보
+    @GetMapping("/query")
+    public QueryDto getQueryDetailByCode(int qcode) {    	
+        return queryService.getQueryDetailByCode(qcode);
+    }
+    
+    //쿼리 수정
+    @PutMapping("/query")
+    public Object modifyQuery(HttpSession httpSession,
+    		@RequestBody HashMap<String, String> map
+    		) throws Exception{    	
+    	int qcode = Integer.parseInt(map.get("qcode"));
+    	String qExpl = map.get("qexpl");
+    	String qTitle = map.get("qtitle");
+    	String qText = map.get("qtext");
+        QueryDto query = queryService.getQueryDetailByCode(qcode);
+        if(query==null) {
+        	HashMap<String, String> msg = new HashMap<String, String>();
+    		msg.put("errMsg", "해당 쿼리가 존재하지 않습니다.");
+        	return new ResponseEntity<>(msg ,HttpStatus.BAD_REQUEST);
+        }
+        query.setQExpl(qExpl);
+        query.setQText(qText);
+        query.setQTitle(qTitle);
+        queryService.updateQuery(query);
+        return new ResponseEntity<>(query.getQCode(), HttpStatus.OK);
+    }
+    
+    //쿼리 삽입
+    @PostMapping("/query")
+    public Object insertQuery(HttpSession httpSession,
+    		@RequestBody HashMap<String, String> map
+    		) throws Exception{
+    	QueryDto query = new QueryDto();
+    	query.setQExpl(map.get("qexpl"));
+    	query.setQTitle( map.get("qtitle"));
+    	query.setQText( map.get("qtext"));
+        queryService.insertQuery(query);
+        return new ResponseEntity<>("success", HttpStatus.OK);
+    }
+    
+    //쿼리 수행
     @PostMapping("/query_async")
-    public String getQueryAsyncResponse(@RequestBody HashMap<String, String> map) {
+    public Object getQueryAsyncResponse(HttpSession httpSession,
+    		@RequestBody HashMap<String, String> map) throws Exception{
     	if(queryService.getSessionCount()>=2) {
-    		return "Session Full";
+    		return new ResponseEntity<>("session full", HttpStatus.LOCKED);
     	}
 		int id = Integer.parseInt(map.get("user"));
+		if(queryService.checkSession(id)) {
+			return new ResponseEntity<>("already running", HttpStatus.CONFLICT);
+		}
 		String query = map.get("query");
 		asyncService.getQueryResponse(id, query);
-		return id + " : async Request Confirmed";
+		return new ResponseEntity<>(id, HttpStatus.OK);
     }
     
     @PostMapping("/query_check")

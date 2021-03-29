@@ -14,7 +14,7 @@ import com.himart.restservicecors.dao.SessionDao;
 import com.himart.restservicecors.dto.QueryResponseDto;
 import com.himart.restservicecors.dto.SessionDto;
 import com.himart.restservicecors.dto.MapperTestDto;
-import com.himart.restservicecors.dto.QueryListDto;
+import com.himart.restservicecors.dto.QueryDto;
 import com.himart.restservicecors.dto.TestDto;
 import com.opencsv.CSVWriter;
 
@@ -171,8 +171,17 @@ public class QueryService {
 	public int getSessionCount() {
 		return sessionDao.getSessionCount();
 	}
-	public List<QueryListDto> getAllQueryListByOrgId(String org_id){
+	public List<QueryDto> getAllQueryListByOrgId(String org_id){
 		return queryDao.getQueryListByOrgId(org_id);
+	}
+	public QueryDto getQueryDetailByCode(int qcode){
+		return queryDao.getQueryDetailByCode(qcode);
+	}
+	public void updateQuery(QueryDto query) {
+		queryDao.updateQuery(query);
+	}
+	public void insertQuery(QueryDto query) {
+		queryDao.insertQuery(query);
 	}
 	public TestDto getJsonTest2(int i,String q){
 		TestDto t = new TestDto();

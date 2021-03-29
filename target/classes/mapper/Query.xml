@@ -3,10 +3,29 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.himart.restservicecors.dao.QueryDao">
-	<select id="getQueryListByOrgId" resultType="QueryListDto">
+	<select id="getQueryListByOrgId" resultType="QueryDto">
 			select A.Q_CODE Q_CODE, A.Q_TITLE Q_TITLE, A.Q_TEXT Q_TEXT
 			from SV900M A left join SV901M B 
 			on A.Q_CODE = B.Q_CODE
 			<if test='org_id != "ALL"'>where B.ORG_ID = #{org_id}</if>
 	</select>
+	<select id="getQueryDetailByCode" resultType="QueryDto">
+			select *
+			from SV900M  
+			where Q_CODE = #{qcode}
+	</select>
+	
+	<update id="updateQuery" parameterType="QueryDto">
+    	update SV900M
+    	set 
+    	q_title = #{qTitle},
+    	q_expl = #{qExpl},
+    	q_text = #{qText}
+    	where q_code = #{qCode}
+    </update>
+    
+    <insert id="insertQuery" parameterType="QueryDto">
+    	insert into SV900M(q_code,q_title,q_text,q_expl)
+    	values((select max(Q_CODE)+1 from SV900M),#{qTitle},#{qText},#{qExpl})
+    </insert>
 </mapper>
