@@ -3,18 +3,15 @@ package com.himart.restservicecors.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-
-import com.himart.restservicecors.dto.QueryResponseDto;
 
 @Service
 public class AsyncService {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
-	QueryService queryService;
+	QueryRunningService queryRunningService;
 
 	//비동기
 	//추후 삭제(테스트용)
@@ -30,8 +27,7 @@ public class AsyncService {
 	
 	@Async
     public void getQueryResponse(int id,String query){
-        queryService.genCsvFileWithQuery(id, query);
-        
+        queryRunningService.genCsvFileWithQuery(id, query);
         logger.info(id + " : finished on Async");
     }
 	
