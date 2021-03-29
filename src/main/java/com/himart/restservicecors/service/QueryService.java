@@ -14,6 +14,7 @@ import com.himart.restservicecors.dao.SessionDao;
 import com.himart.restservicecors.dto.QueryResponseDto;
 import com.himart.restservicecors.dto.SessionDto;
 import com.himart.restservicecors.dto.MapperTestDto;
+import com.himart.restservicecors.dto.QueryListDto;
 import com.himart.restservicecors.dto.TestDto;
 import com.opencsv.CSVWriter;
 
@@ -34,8 +35,8 @@ import java.sql.Statement;
 
 @Service
 public class QueryService {
-//	@Autowired
-//	private QueryDao queryDao;
+	@Autowired
+	private QueryDao queryDao;
 	
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
@@ -170,7 +171,9 @@ public class QueryService {
 	public int getSessionCount() {
 		return sessionDao.getSessionCount();
 	}
-	
+	public List<QueryListDto> getAllQueryListByOrgId(String org_id){
+		return queryDao.getQueryListByOrgId(org_id);
+	}
 	public TestDto getJsonTest2(int i,String q){
 		TestDto t = new TestDto();
 		t.setName(q);

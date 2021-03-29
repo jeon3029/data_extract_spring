@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.himart.restservicecors.dao.QueryDao">
+	<select id="getQueryListByOrgId" resultType="QueryListDto">
+			select A.Q_CODE Q_CODE, A.Q_TITLE Q_TITLE, A.Q_TEXT Q_TEXT
+			from SV900M A left join SV901M B 
+			on A.Q_CODE = B.Q_CODE
+			<if test='org_id != "ALL"'>where B.ORG_ID = #{org_id}</if>
+	</select>
+</mapper>

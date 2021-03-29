@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.himart.restservicecors.dto.QueryResponseDto;
 import com.himart.restservicecors.dto.MapperTestDto;
+import com.himart.restservicecors.dto.QueryListDto;
 import com.himart.restservicecors.dto.TestDto;
 import com.himart.restservicecors.service.AsyncService;
 import com.himart.restservicecors.service.QueryService;
@@ -59,11 +60,10 @@ public class QueryController {
 		String query = map.get("query");
 		return queryService.getQueryResponse(id,query);
     }
-//    @GetMapping("/query/all/{org_id}")
-//    public List<QueryListDto> getQueryByOrgId(@PathVariable int org_id) {
-//    	
-//        return ;
-//    }
+    @GetMapping("/query/all/{org_id}")
+    public List<QueryListDto> getQueryByOrgId(@PathVariable String org_id) {    	
+        return queryService.getAllQueryListByOrgId(org_id);
+    }
     
     @PostMapping("/query_async")
     public String getQueryAsyncResponse(@RequestBody HashMap<String, String> map) {
