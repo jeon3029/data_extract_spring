@@ -9,4 +9,20 @@
 			where Q_CODE = #{qcode}
 			AND ORG_ID = #{orgId}
 	</select>
+	<insert id="insertAuth" parameterType="AuthDto" >
+			insert into sv901m
+			(Q_CODE,ORG_ID)
+			values
+			(#{qcode},#{orgId})
+	</insert>
+	<delete id="deleteAuth" parameterType="AuthDto" >
+			delete from sv901m
+			where Q_CODE = #{qcode}
+			and ORG_ID = #{orgId}
+	</delete>
+	<select id="selectAllAuth" parameterType="int" resultType="String">
+			select ORG_ID from
+			SV901M
+			where Q_CODE = #{qcode}
+	</select>
 </mapper>

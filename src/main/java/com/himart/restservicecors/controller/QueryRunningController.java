@@ -66,7 +66,7 @@ public class QueryRunningController {
     	if(queryRunningService.getSessionCount()>=2) {
     		return new ResponseEntity<>("session full", HttpStatus.LOCKED);
     	}
-		int qcode = Integer.parseInt(qrDto.getQCode());
+		int qcode = Integer.parseInt(qrDto.getQcode());
 		int hrusr_id = Integer.parseInt(qrDto.getHrusrId());
 		HashMap<String,String> conditions = qrDto.getConditions();
 		System.out.println(conditions);
@@ -75,6 +75,8 @@ public class QueryRunningController {
 		}
 		QueryDto query = queryDao.getQueryDetailByCode(qcode);
 		logger.info(""+qcode+ hrusr_id);
+		//TODO : conditions 적용해서 쿼리 바꿔주기
+		//인자 넘길 떄 QueryDto로 넘기기
 		asyncService.getQueryResponse(hrusr_id, query.getQText());
 		return new ResponseEntity<>(hrusr_id, HttpStatus.OK);
     }
